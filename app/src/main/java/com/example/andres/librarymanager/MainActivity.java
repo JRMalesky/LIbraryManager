@@ -16,11 +16,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     TextView mConditionTextView;
+    TextView mNameTextView;
+    TextView mAuthorTextView;
     Button mButtonTest1;
     Button mButtonTest2;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mConditionRef = mRootRef.child("Dune");
-
+    DatabaseReference mConditionRef = mRootRef.child("Availability");
+    DatabaseReference mNameRef = mRootRef.child("Book");
+    DatabaseReference mAuthorRef = mRootRef.child("Author");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,13 +31,39 @@ public class MainActivity extends AppCompatActivity {
 
         //UI Elements.
         mConditionTextView = (TextView) findViewById(R.id.texviewCondition);
-
+        mNameTextView = (TextView) findViewById(R.id.textViewName);
+        mAuthorTextView = (TextView) findViewById(R.id.textViewAuthor);
         mButtonTest1 = (Button) findViewById(R.id.buttonTest1);
         mButtonTest2 = (Button) findViewById(R.id.buttonTest2);
+
     }
     @Override
     protected void  onStart(){
         super.onStart();
+        mNameRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String text = dataSnapshot.getValue(String.class);
+                mNameTextView.setText(text);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        mAuthorRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String text = dataSnapshot.getValue(String.class);
+                mAuthorTextView.setText(text);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     mConditionRef.addValueEventListener(new ValueEventListener() {
         @Override
@@ -42,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             String text = dataSnapshot.getValue(String.class);
             mConditionTextView.setText(text);
         }
+
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
@@ -51,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
         mButtonTest1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mConditionRef.setValue("Unavailable");
+                mConditionRef.setValue("Available");
             }
         });
         mButtonTest2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mConditionRef.setValue("Available");
+                mConditionRef.setValue("Unavailable");
             }
         });
     }
