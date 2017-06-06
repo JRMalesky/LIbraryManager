@@ -18,12 +18,12 @@ public class MainActivity extends AppCompatActivity {
     TextView mConditionTextView;
     TextView mNameTextView;
     TextView mAuthorTextView;
-    Button mButtonTest1;
-    Button mButtonTest2;
+    Button mButtonCheckIn;
+    Button mButtonCheckOut;
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mConditionRef = mRootRef.child("Availability");
-    DatabaseReference mNameRef = mRootRef.child("Book");
-    DatabaseReference mAuthorRef = mRootRef.child("Author");
+    DatabaseReference mConditionRef = mRootRef.child("Books").child("Lolita").child("Availability");
+    DatabaseReference mNameRef = mRootRef.child("Books").child("Lolita").child("BookName");
+    DatabaseReference mAuthorRef = mRootRef.child("Books").child("Lolita").child("Author");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         mConditionTextView = (TextView) findViewById(R.id.texviewCondition);
         mNameTextView = (TextView) findViewById(R.id.textViewName);
         mAuthorTextView = (TextView) findViewById(R.id.textViewAuthor);
-        mButtonTest1 = (Button) findViewById(R.id.buttonTest1);
-        mButtonTest2 = (Button) findViewById(R.id.buttonTest2);
+        mButtonCheckIn = (Button) findViewById(R.id.buttonTest1);
+        mButtonCheckOut = (Button) findViewById(R.id.buttonTest2);
 
     }
     @Override
@@ -68,8 +68,13 @@ public class MainActivity extends AppCompatActivity {
     mConditionRef.addValueEventListener(new ValueEventListener() {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
-            String text = dataSnapshot.getValue(String.class);
-            mConditionTextView.setText(text);
+            boolean Availability = dataSnapshot.getValue(boolean.class);
+            if(Availability == true)
+                mConditionTextView.setText("Available");
+            else
+                mConditionTextView.setText("Unavailable");
+
+
         }
 
 
@@ -78,16 +83,16 @@ public class MainActivity extends AppCompatActivity {
 
         }
     });
-        mButtonTest1.setOnClickListener(new View.OnClickListener() {
+        mButtonCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mConditionRef.setValue("Available");
+                mConditionRef.setValue(true);
             }
         });
-        mButtonTest2.setOnClickListener(new View.OnClickListener() {
+        mButtonCheckOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mConditionRef.setValue("Unavailable");
+                mConditionRef.setValue(false);
             }
         });
     }
