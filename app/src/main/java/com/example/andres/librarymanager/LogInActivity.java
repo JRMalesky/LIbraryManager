@@ -8,7 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -23,6 +27,7 @@ public class LogInActivity extends AppCompatActivity {
     private EditText mPass;
     private Button mLogin;
     private Button mCreate;
+    private Button mForgot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,7 @@ public class LogInActivity extends AppCompatActivity {
         mPass = (EditText) findViewById(R.id.editTextPass);
         mLogin = (Button) findViewById(R.id.buttonLogin);
         mCreate = (Button) findViewById(R.id.buttonCreate);
+        mForgot = (Button) findViewById(R.id.buttonToForgotPassword);
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -57,14 +63,35 @@ public class LogInActivity extends AppCompatActivity {
                 String Pass = mPass.getText().toString();
                 if(!Email.equals("") && !Pass.equals(""))
                 {
-                    mAuth.signInWithEmailAndPassword(Email, Pass);
+                    mAuth.signInWithEmailAndPassword(Email, Pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful())
+                            {
+                                Toast.makeText(LogInActivity.this, "Log In successful", Toast.LENGTH_LONG).show();
+                            }
+                            else
+                            {
+                                Toast.makeText(LogInActivity.this, "Log In failed.", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+
                 }
+                else
+                    Toast.makeText(LogInActivity.this, "Please write email or password...", Toast.LENGTH_LONG).show();
             }
         });
         mCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LogInActivity.this, CreateActivity.class));
+            }
+        });
+        mForgot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LogInActivity.this, ResetPasswordActivity.class));
             }
         });
     }

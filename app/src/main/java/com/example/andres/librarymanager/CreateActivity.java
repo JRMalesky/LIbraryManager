@@ -72,6 +72,7 @@ public class CreateActivity extends AppCompatActivity {
                                 {
                                     Toast.makeText(CreateActivity.this, "Success", Toast.LENGTH_LONG).show();
                                     startActivity(new Intent(CreateActivity.this, LogInActivity.class));
+
                                 }
 
                                 // ...
