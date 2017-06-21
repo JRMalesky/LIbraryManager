@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.andres.librarymanager.CatalogActivity"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp"
+    android:windowSoftInputMode="adjustResize">
+
+    <LinearLayout
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="0px"
+        android:layout_height="0px"/>
+
+    <!-- :nextFocusUp and :nextFocusLeft have been set to the id of this component
+    to prevent the dummy from receiving focus again -->
+    <AutoCompleteTextView android:id="@+id/autotext"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:nextFocusUp="@id/autotext"
+        android:nextFocusLeft="@id/autotext"/>
+
+
+
+    <EditText
+        android:id="@+id/editTextSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Search"
+        android:inputType="textPersonName"
+        android:layout_marginLeft="-23dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="-10dp" />
+
+
+    <ListView
+        android:id="@+id/ListView1"
+        android:layout_width="371dp"
+        android:layout_height="460dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="43dp"
+        app:layout_constraintTop_toTopOf="@+id/autotext"
+        android:paddingTop="1dp"
+
+        />
+
+</android.support.constraint.ConstraintLayout>

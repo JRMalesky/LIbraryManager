@@ -21,16 +21,18 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    TextView mConditionTextView;
-    TextView mNameTextView;
-    TextView mAuthorTextView;
-    Button mButtonCheckIn;
-    Button mButtonCheckOut;
-    Button mLogOut;
+    private TextView mConditionTextView;
+    private TextView mNameTextView;
+    private TextView mAuthorTextView;
+    private Button mButtonCheckIn;
+    private Button mButtonCheckOut;
+
+
+
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference mConditionRef = mRootRef.child("Books").child("Lolita").child("Availability");
-    DatabaseReference mNameRef = mRootRef.child("Books").child("Lolita").child("BookName");
-    DatabaseReference mAuthorRef = mRootRef.child("Books").child("Lolita").child("Author");
+    DatabaseReference mConditionRef = mRootRef.child("Books").child(CatalogActivity.mbookname).child("Availability");
+    DatabaseReference mNameRef = mRootRef.child("Books").child(CatalogActivity.mbookname).child("BookName");
+    DatabaseReference mAuthorRef = mRootRef.child("Books").child(CatalogActivity.mbookname).child("Author");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,17 +59,32 @@ public class MainActivity extends AppCompatActivity {
         mAuthorTextView = (TextView) findViewById(R.id.textViewAuthor);
         mButtonCheckIn = (Button) findViewById(R.id.buttonTest1);
         mButtonCheckOut = (Button) findViewById(R.id.buttonTest2);
-        mLogOut = (Button) findViewById(R.id.buttonLogOut);
+
+        mButtonCheckIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mConditionRef.setValue(true);
+            }
+        });
+        mButtonCheckOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mConditionRef.setValue(false);
+            }
+        });
+
     }
     @Override
     protected void  onStart(){
         super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
         mNameRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String text = dataSnapshot.getValue(String.class);
+
+
                 mNameTextView.setText(text);
-                mAuth.addAuthStateListener(mAuthListener);
             }
 
             @Override
@@ -106,24 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
     });
-        mLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAuth.signOut();
-            }
-        });
-        mButtonCheckIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mConditionRef.setValue(true);
-            }
-        });
-        mButtonCheckOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mConditionRef.setValue(false);
-            }
-        });
+
     }
     @Override
     public void onStop() {

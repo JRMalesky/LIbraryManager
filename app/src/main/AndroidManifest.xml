@@ -20,7 +20,19 @@
         </activity>
         <activity android:name=".CreateActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".ResetPasswordActivity"></activity>
+        <activity android:name=".ResetPasswordActivity" />
+        <activity
+            android:name=".ExampleActivity"
+            android:label="@string/title_activity_example"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MenuActivity"
+            android:label="@string/title_activity_menu"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".CatalogActivity"
+            >
+
+        </activity>
     </application>
 
 </manifest>
