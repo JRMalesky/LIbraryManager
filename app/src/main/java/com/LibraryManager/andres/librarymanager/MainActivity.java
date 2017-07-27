@@ -1,4 +1,4 @@
-package com.example.andres.librarymanager;
+package com.LibraryManager.andres.librarymanager;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView mAuthorTextView;
     private Button mButtonCheckIn;
     private Button mButtonCheckOut;
-
+    private Button mSynopsis;
+    private ImageView image;
 
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
@@ -59,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
         mAuthorTextView = (TextView) findViewById(R.id.textViewAuthor);
         mButtonCheckIn = (Button) findViewById(R.id.buttonTest1);
         mButtonCheckOut = (Button) findViewById(R.id.buttonTest2);
-
+        mSynopsis = (Button) findViewById(R.id.buttonSynopsis);
+        image = (ImageView) findViewById(R.id.imageViewAvailability);
         mButtonCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +75,12 @@ public class MainActivity extends AppCompatActivity {
                 mConditionRef.setValue(false);
             }
         });
-
+        mSynopsis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, Pop.class));
+            }
+        });
     }
     @Override
     protected void  onStart(){
@@ -110,9 +118,16 @@ public class MainActivity extends AppCompatActivity {
         public void onDataChange(DataSnapshot dataSnapshot) {
             boolean Availability = dataSnapshot.getValue(boolean.class);
             if(Availability == true)
+            {
                 mConditionTextView.setText("Available");
+                image.setImageResource(R.drawable.checkinmarker);
+            }
+
             else
+            {
                 mConditionTextView.setText("Unavailable");
+                image.setImageResource(R.drawable.checkoutmarker);
+            }
 
 
         }

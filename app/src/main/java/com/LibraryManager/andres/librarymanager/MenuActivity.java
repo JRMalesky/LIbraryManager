@@ -1,10 +1,8 @@
-package com.example.andres.librarymanager;
+package com.LibraryManager.andres.librarymanager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,12 +11,13 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class MenuActivity extends AppCompatActivity {
     private static final String TAG = "MenuActivity";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private Button mCatalog,mSignOut;
+    private Button mCatalog,mSignOut,mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +34,9 @@ public class MenuActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName("John Smith").build();
+
+                    user.updateProfile(profileUpdates);
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -46,7 +48,7 @@ public class MenuActivity extends AppCompatActivity {
 
 
         mCatalog = (Button)findViewById(R.id.buttonCatalog);
-
+        mAccount = (Button)findViewById(R.id.buttonToAccountInfo);
         mSignOut = (Button)findViewById(R.id.buttonMenuSignOut);
 
 
@@ -55,6 +57,12 @@ public class MenuActivity extends AppCompatActivity {
     protected void  onStart(){
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+        mAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this, AccountInfoActivity.class));
+            }
+        });
         mSignOut.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {

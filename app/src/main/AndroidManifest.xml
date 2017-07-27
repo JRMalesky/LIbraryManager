@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.andres.librarymanager">
+    package="com.LibraryManager.andres.librarymanager">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -29,10 +29,15 @@
             android:name=".MenuActivity"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".CatalogActivity"
-            >
-
-        </activity>
+        <activity android:name=".CatalogActivity" />
+        <activity android:name=".AccountInfoActivity" />
+        <activity
+            android:name=".ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Pop"
+            android:theme="@style/AppTheme.CustomTheme"
+            ></activity>
     </application>
 
 </manifest>

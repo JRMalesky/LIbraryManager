@@ -1,4 +1,4 @@
-package com.example.andres.librarymanager;
+package com.LibraryManager.andres.librarymanager;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

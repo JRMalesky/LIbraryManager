@@ -1,4 +1,4 @@
-package com.example.andres.librarymanager;
+package com.LibraryManager.andres.librarymanager;
 
 import android.content.Intent;
 import android.os.Bundle;

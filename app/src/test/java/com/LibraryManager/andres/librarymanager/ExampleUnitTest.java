@@ -1,4 +1,4 @@
-package com.example.andres.librarymanager;
+package com.LibraryManager.andres.librarymanager;
 
 import org.junit.Test;
 

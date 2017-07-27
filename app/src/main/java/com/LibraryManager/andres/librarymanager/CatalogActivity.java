@@ -1,16 +1,16 @@
-package com.example.andres.librarymanager;
+package com.LibraryManager.andres.librarymanager;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -23,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.Collections;
 
 public class CatalogActivity extends AppCompatActivity {
     private static final String TAG = "CatalogActivity";
@@ -31,11 +31,12 @@ public class CatalogActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference myRef;
-    private ArrayList<String> array = new ArrayList<>();
+    private ArrayList<String> arrayfromdata = new ArrayList<>();
     private EditText Search;
     private String Test;
     public static String mbookname = "Lolita";
-
+    private Button Sort;
+    private int Sorted = 0;
     ArrayAdapter adapter;
     private ListView mList;
 
@@ -66,7 +67,7 @@ public class CatalogActivity extends AppCompatActivity {
         myRef = mFirebaseDatabase.getReference();
         mList = (ListView) findViewById(R.id.ListView1);
         Search = (EditText) findViewById(R.id.editTextSearch);
-
+        Sort = (Button) findViewById(R.id.buttonSort);
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -86,6 +87,26 @@ public class CatalogActivity extends AppCompatActivity {
                 startActivity(new Intent(CatalogActivity.this, MainActivity.class));
             }
         });
+        Sort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(Sorted == 0)
+                {
+                Collections.sort(arrayfromdata, Collections.reverseOrder());
+                adapter = new ArrayAdapter(CatalogActivity.this, android.R.layout.simple_list_item_1, arrayfromdata);
+                mList.setAdapter(adapter);
+                Sorted = 1;
+                }
+                else
+                {
+                    Collections.sort(arrayfromdata, null);
+                    adapter = new ArrayAdapter(CatalogActivity.this, android.R.layout.simple_list_item_1, arrayfromdata);
+                    mList.setAdapter(adapter);
+                    Sorted = 0;
+                }
+            }
+        });
 
         Search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -101,7 +122,7 @@ public class CatalogActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 Test = Search.getText().toString();
-                adapter = new ArrayAdapter(CatalogActivity.this, android.R.layout.simple_list_item_1, array);
+                adapter = new ArrayAdapter(CatalogActivity.this, android.R.layout.simple_list_item_1, arrayfromdata);
                 adapter.getFilter().filter(Test);
                 mList.setAdapter(adapter);
             }
@@ -110,16 +131,16 @@ public class CatalogActivity extends AppCompatActivity {
 
 
     private void showdata(DataSnapshot dataSnapshot, ArrayAdapter adaptor) {
-        array = new ArrayList<>();
+        arrayfromdata = new ArrayList<>();
         for(DataSnapshot ds: dataSnapshot.child("Books").getChildren())
         {
             String Bookname;
             Bookname = ds.getKey().toString();
 
             Log.d(TAG, "showData: BookName " + Bookname);
-            array.add(Bookname);
+            arrayfromdata.add(Bookname);
         }
-            adaptor = new ArrayAdapter(this, android.R.layout.simple_list_item_1, array);
+            adaptor = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayfromdata);
 
 
             mList.setAdapter(adaptor);
