@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,7 +38,7 @@ public class CatalogActivity extends AppCompatActivity {
     public static String mbookname = "Lolita";
     private Button Sort;
     private int Sorted = 0;
-    ArrayAdapter adapter;
+    private ArrayAdapter adapter;
     private ListView mList;
 
 
@@ -69,6 +70,7 @@ public class CatalogActivity extends AppCompatActivity {
         Search = (EditText) findViewById(R.id.editTextSearch);
         Sort = (Button) findViewById(R.id.buttonSort);
 
+
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -91,18 +93,17 @@ public class CatalogActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(Sorted == 0)
-                {
-                Collections.sort(arrayfromdata, Collections.reverseOrder());
-                adapter = new ArrayAdapter(CatalogActivity.this, android.R.layout.simple_list_item_1, arrayfromdata);
-                mList.setAdapter(adapter);
-                Sorted = 1;
-                }
-                else
-                {
-                    Collections.sort(arrayfromdata, null);
+                if (Sorted == 0) {
+                    Collections.sort(arrayfromdata, Collections.reverseOrder());
+                    SearchableAdapter mSearchAdapter = new SearchableAdapter(CatalogActivity.this, arrayfromdata);
                     adapter = new ArrayAdapter(CatalogActivity.this, android.R.layout.simple_list_item_1, arrayfromdata);
-                    mList.setAdapter(adapter);
+                    mList.setAdapter(mSearchAdapter);
+                    Sorted = 1;
+                } else {
+                    Collections.sort(arrayfromdata, null);
+                    SearchableAdapter mSearchAdapter = new SearchableAdapter(CatalogActivity.this, arrayfromdata);
+                    adapter = new ArrayAdapter(CatalogActivity.this, android.R.layout.simple_list_item_1, arrayfromdata);
+                    mList.setAdapter(mSearchAdapter);
                     Sorted = 0;
                 }
             }
@@ -122,9 +123,11 @@ public class CatalogActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 Test = Search.getText().toString();
-                adapter = new ArrayAdapter(CatalogActivity.this, android.R.layout.simple_list_item_1, arrayfromdata);
-                adapter.getFilter().filter(Test);
-                mList.setAdapter(adapter);
+
+                SearchableAdapter mSearchAdapter = new SearchableAdapter(CatalogActivity.this, arrayfromdata);
+                mSearchAdapter.getFilter().filter(Test);
+
+                mList.setAdapter(mSearchAdapter);
             }
         });
     }
@@ -141,9 +144,9 @@ public class CatalogActivity extends AppCompatActivity {
             arrayfromdata.add(Bookname);
         }
             adaptor = new ArrayAdapter(this, android.R.layout.simple_list_item_1, arrayfromdata);
+            SearchableAdapter mSearchAdapter = new SearchableAdapter(CatalogActivity.this, arrayfromdata);
 
-
-            mList.setAdapter(adaptor);
+            mList.setAdapter(mSearchAdapter);
 
     }
 

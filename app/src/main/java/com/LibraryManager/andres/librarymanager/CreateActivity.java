@@ -15,6 +15,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class CreateActivity extends AppCompatActivity {
 
@@ -23,8 +26,10 @@ public class CreateActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private EditText mNewEmail;
-    private EditText mNewPass;
+    private EditText mNewPass, mDisplayName;
     private Button mCreateNew, mBackToLogIn;
+    private String mName;
+    DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +43,11 @@ public class CreateActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    mRootRef.child("users").child(user.getUid()).setValue(user);
+                    mRootRef.child("users").child(user.getUid()).child("BookReserved").child("BookName").setValue("");
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(mName).build();
+
+                    user.updateProfile(profileUpdates);
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -49,12 +59,14 @@ public class CreateActivity extends AppCompatActivity {
         mNewPass = (EditText) findViewById(R.id.editTextCreatePass);
         mCreateNew = (Button) findViewById(R.id.buttonCreateNew);
         mBackToLogIn = (Button) findViewById(R.id.buttonBackToLog);
+        mDisplayName = (EditText) findViewById(R.id.editTextDisplayName);
 
         mCreateNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String Email = mNewEmail.getText().toString();
                 String Pass = mNewPass.getText().toString();
+                mName = mDisplayName.getText().toString();
                 mAuth.createUserWithEmailAndPassword(Email, Pass)
                         .addOnCompleteListener(CreateActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -66,6 +78,7 @@ public class CreateActivity extends AppCompatActivity {
                                 // signed in user can be handled in the listener.
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(CreateActivity.this, "Failed", Toast.LENGTH_LONG).show();
+
                                 }
                                 else
                                 {

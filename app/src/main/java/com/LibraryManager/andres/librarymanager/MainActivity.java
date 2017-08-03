@@ -29,12 +29,15 @@ public class MainActivity extends AppCompatActivity {
     private Button mButtonCheckOut;
     private Button mSynopsis;
     private ImageView image;
+    private int Availabilitynum = 0;
 
 
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference mConditionRef = mRootRef.child("Books").child(CatalogActivity.mbookname).child("Availability");
     DatabaseReference mNameRef = mRootRef.child("Books").child(CatalogActivity.mbookname).child("BookName");
     DatabaseReference mAuthorRef = mRootRef.child("Books").child(CatalogActivity.mbookname).child("Author");
+    DatabaseReference mUserHeldBook;
+    DatabaseReference mUserChekedBooks;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    mUserHeldBook = mRootRef.child("users").child(user.getUid()).child("BookReserved").child("BookName");
+                    mUserChekedBooks = mRootRef.child("users").child(user.getUid()).child("BooksChecked");
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -66,13 +71,17 @@ public class MainActivity extends AppCompatActivity {
         mButtonCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mConditionRef.setValue(true);
+                mConditionRef.setValue(Availabilitynum + 1);
+                mUserHeldBook.setValue("");
+                mUserChekedBooks.child(CatalogActivity.mbookname).setValue(false);
             }
         });
         mButtonCheckOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mConditionRef.setValue(false);
+                mConditionRef.setValue(Availabilitynum - 1);
+                mUserHeldBook.setValue(CatalogActivity.mbookname);
+                mUserChekedBooks.child(CatalogActivity.mbookname).setValue(true);
             }
         });
         mSynopsis.setOnClickListener(new View.OnClickListener() {
@@ -113,31 +122,74 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    mConditionRef.addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(DataSnapshot dataSnapshot) {
-            boolean Availability = dataSnapshot.getValue(boolean.class);
-            if(Availability == true)
-            {
-                mConditionTextView.setText("Available");
-                image.setImageResource(R.drawable.checkinmarker);
+
+        mConditionRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final int Availability = dataSnapshot.getValue(int.class);
+                Availabilitynum = Availability;
+                if (Availability != 0) {
+                    mConditionTextView.setText("Available");
+                    image.setImageResource(R.drawable.checkinmarker);
+                    mUserHeldBook.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String Bookname = dataSnapshot.getValue(String.class);
+                            if(Bookname == null || Bookname.equals(""))
+                            {
+                                mButtonCheckIn.setEnabled(false);
+                                mButtonCheckOut.setEnabled(true);
+                            }
+                            else
+                            {
+                                mButtonCheckIn.setEnabled(false);
+                                mButtonCheckOut.setEnabled(false);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+                else {
+                    mConditionTextView.setText("Unavailable");
+                    image.setImageResource(R.drawable.checkoutmarker);
+                    mUserHeldBook.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String Bookname = dataSnapshot.getValue(String.class);
+                            if(Bookname.equals(CatalogActivity.mbookname))
+                            {
+                                mButtonCheckIn.setEnabled(true);
+                                mButtonCheckOut.setEnabled(false);
+                            }
+                            else
+                            {
+                                mButtonCheckIn.setEnabled(false);
+                                mButtonCheckOut.setEnabled(false);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
+
+
             }
 
-            else
-            {
-                mConditionTextView.setText("Unavailable");
-                image.setImageResource(R.drawable.checkoutmarker);
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
-
-
-        }
-
-
-        @Override
-        public void onCancelled(DatabaseError databaseError) {
-
-        }
-    });
+        });
 
     }
     @Override

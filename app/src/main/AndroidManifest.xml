@@ -34,10 +34,11 @@
         <activity
             android:name=".ScrollingActivity"
             android:label="@string/title_activity_scrolling"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Pop"
-            android:theme="@style/AppTheme.CustomTheme"
-            ></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Pop"
+            android:theme="@style/AppTheme.CustomTheme" />
+        <activity android:name=".MyBooksActivity"></activity>
     </application>
 
 </manifest>
