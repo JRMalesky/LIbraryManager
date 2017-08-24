@@ -19,7 +19,8 @@ public class MenuActivity extends AppCompatActivity {
     private static final String TAG = "MenuActivity";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private Button mCatalog,mSignOut,mAccount;
+    private Button mCatalog,mSignOut,mAccount, mMyBooks, mFeatured;
+
     DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
 
     @Override
@@ -51,6 +52,8 @@ public class MenuActivity extends AppCompatActivity {
         mCatalog = (Button)findViewById(R.id.buttonCatalog);
         mAccount = (Button)findViewById(R.id.buttonToAccountInfo);
         mSignOut = (Button)findViewById(R.id.buttonMenuSignOut);
+        mMyBooks = (Button) findViewById(R.id.buttonToChecked);
+        mFeatured = (Button) findViewById(R.id.buttonFeaturedBooks);
 
 
     }
@@ -74,6 +77,18 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MenuActivity.this, CatalogActivity.class));
+            }
+        });
+        mMyBooks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this, MyBooksActivity.class));
+            }
+        });
+        mFeatured.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MenuActivity.this, FeaturesActivity.class));
             }
         });
     }

@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">LibraryManager</string>
+    <string name="app_name">EL Librero</string>
+    <string name="Failed">Failed.</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
     <string name="title_activity_example">ExampleActivity</string>
     <string name="title_activity_menu">MenuActivity</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
@@ -93,5 +96,12 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">Filter ListView Images</string>
+    <string name="ranklabel">"Book: "</string>
+    <string name="countrylabel">"Author : "</string>
+    <string name="populationlabel">"Genre : "</string>
     <color name="grayish">#9A98A4</color>
 </resources>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/menu_bottom">
+    <item
+        android:id = "@+id/Catalog"
+        android:title="Catalog"/>
+
+    <item
+        android:id = "@+id/MyBooks"
+        android:title="My Books"/>
+
+    <item
+        android:id = "@+id/FeaturedBooks"
+        android:title="Featured Books"/>
+</group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/menu_top">
+
+    <item
+        android:id = "@+id/SignOut"
+        android:title="Sign Out"/>
+    <item
+        android:id = "@+id/ResetPass"
+        android:title="Reset Password"/>
+
+    </group>
+
+
+</menu>

@@ -38,7 +38,8 @@
         <activity
             android:name=".Pop"
             android:theme="@style/AppTheme.CustomTheme" />
-        <activity android:name=".MyBooksActivity"></activity>
+        <activity android:name=".MyBooksActivity" />
+        <activity android:name=".FeaturesActivity"></activity>
     </application>
 
 </manifest>

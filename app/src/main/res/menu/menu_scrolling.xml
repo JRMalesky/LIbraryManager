@@ -3,8 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.LibraryManager.andres.librarymanager.ScrollingActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:id="@+id/action_sortName"
+        android:title="Sort by Name" />
+    <item
+        android:id="@+id/action_sortAuthor"
+        android:title="Sort by Author" />
+    <item
+        android:id="@+id/action_sortGenre"
+        android:title="Sort by Genre" />
 </menu>
